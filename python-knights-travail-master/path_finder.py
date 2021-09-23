@@ -7,15 +7,16 @@ class KnightPathFinder:
         self._considered_positions = {self.position}
         self._board = self.create_board()
 
-    def create_board(self, board = ()):
+    def create_board(self, board = []):
         for i in range(8):
             for j in range(8):
-                board += (i, j)
+                board.append((i, j))
         return board
 
     def get_valid_moves(self, position):
         (x, y) = position
         positions = []
+        result = []
         positions.append((x-1, y+2))
         positions.append((x-1, y-2))
         positions.append((x+1, y+2))
@@ -25,17 +26,16 @@ class KnightPathFinder:
         positions.append((x+2, y-1))
         positions.append((x-2, y-1))
         for current_position in positions:
-            if current_position not in self._board or current_position in self._considered_positions:
-                print(positions)
-                print(current_position)
-                positions.remove(current_position)
-                # self._considered_positions.append(current_position)
-        return positions
+            if current_position in self._board:
+                result.append(current_position)
+        return result
 
     def new_move_positions(self, position):
+        difference = set(self.get_valid_moves(position)).difference(self._considered_positions)
         for current_position in self.get_valid_moves(position):
-            self._considered_positions.add(current_position)
-
+            if(current_position not in self._considered_positions):
+                self._considered_positions.add(current_position)
+        return difference
 
     # def find_path(self, position):
 

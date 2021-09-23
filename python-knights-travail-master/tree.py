@@ -15,12 +15,12 @@ class Node:
     def add_child(self,child):
         if child not in self._children:
             self._children.append(child)
-            child._parent = self
+            child.parent = self
 
     def remove_child(self,child):
         if child in self._children:
             self._children.remove(child)
-            child._parent = None
+            child.parent = None
 
     @property
     def parent(self):
@@ -28,18 +28,22 @@ class Node:
 
     @parent.setter
     def parent(self,newParent):
+        if newParent is self._parent: return
         if self._parent is not None:
             self._parent.remove_child(self)
+        self._parent = newParent
         if newParent is not None:
             newParent.add_child(self)
-        self._parent = newParent
+
 
 
     def depth_search(self, value):
         if value == self.value:
             return self
         for currentNode in self.children:
-           return currentNode.depth_search(value)
+           returnedNode = currentNode.depth_search(value)
+           if returnedNode is not None:
+               return returnedNode
 
 
 
